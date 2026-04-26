@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>NEXTRA BANK | Core Banking System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #0F172A;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Asosiy konteyner - mobil ekran */
+        .app-container {
+            max-width: 450px;
+            margin: 0 auto;
+            background: #F8FAFC;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        }
+
+        /* Status bar */
+        .status-bar {
+            background: #0F172A;
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Scroll area */
+        .scroll-area {
+            height: calc(100vh - 50px);
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+
+        /* Login sahifasi */
+        .login-bg {
+            background: linear-gradient(145deg, #0F2B3D 0%, #1A4A5A 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+        .login-card {
+            background: white;
+            border-radius: 48px;
+            padding: 35px 28px;
+            width: 100%;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+        }
+        .logo-big {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .logo-big h1 {
+            font-size: 42px;
+            color: #0F2B3D;
+        }
+        .logo-big span {
+            color: #FFD966;
+        }
+        .logo-big p {
+            color: #64748B;
+            margin-top: 6px;
+        }
+
+        /* Form elementlari */
+        .input-field {
+            width: 100%;
+            padding: 16px 18px;
+            border: 1px solid #E2E8F0;
+            border-radius: 32px;
+            font-size: 15px;
+            margin-bottom: 16px;
+            background: #F8FAFC;
+            transition: all 0.2s;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #0F2B3D;
+            box-shadow: 0 0 0 3px rgba(15,43,61,0.1);
+        }
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #0F2B3D, #1A4A5A);
+            color: white;
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+        .btn-danger {
+            background: #E74C3C;
+            color: white;
+        }
+
+        /* Header (bank stili) */
+        .bank-header {
+            background: linear-gradient(135deg, #0F2B3D 0%, #1A4A5A 100%);
+            padding: 20px;
+            border-radius: 0 0 32px 32px;
+            color: white;
+        }
+        .greeting h4 {
+            font-size: 13px;
+            opacity: 0.8;
+            font-weight: normal;
+        }
+        .greeting h2 {
+            font-size: 24px;
+            margin-top: 4px;
+        }
+        .balance-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .balance-label {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        .balance-amount {
+            font-size: 34px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+        .card-number {
+            font-family: monospace;
+            font-size: 16px;
+            letter-spacing: 2px;
+            margin: 12px 0 8px;
+        }
+
+        /* Tez amallar */
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 20px;
+            background: white;
+            margin: 20px;
+            border-radius: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .quick-item {
+            text-align: center;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .quick-item:active {
+            transform: scale(0.94);
+        }
+        .quick-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #0F2B3D, #1A4A5A);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 26px;
+            color: white;
+        }
+        .quick-label {
+            font-size: 11px;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        /* Tab menyu */
+        .tab-bar {
+            display: flex;
+            background: white;
+            margin: 0 15px;
+            border-radius: 32px;
+            padding: 6px;
+            gap: 6px;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border-radius: 28px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748B;
+            transition: 0.2s;
+        }
+        .tab.active {
+            background: linear-gradient(135deg, #0F2B3D, #1A4A5A);
+            color: white;
+        }
+
+        /* Content */
+        .content-panel {
+            padding: 20px;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+
+        /* Kartochkalar */
+        .card-item {
+            background: white;
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .loan-item { border-left-color: #F59E0B; }
+        .deposit-item { border-left-color: #10B981; }
+        .flex-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .text-muted {
+            color: #64748B;
+            font-size: 12px;
+        }
+        .badge {
+            background: #E2E8F0;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Toast xabar */
+        .toast-msg {
+            position: fixed;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            background: #1E293B;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 40px;
+            text-align: center;
+            z-index: 1000;
+            font-size: 14px;
+            animation: slideUp 0.2s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Bottom navbar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 450px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 20px 22px;
+            border-top: 1px solid #E2E8F0;
+        }
+        .nav-btn {
+            text-align: center;
+            cursor: pointer;
+            padding: 6px 0;
+        }
+        .nav-icon {
+            font-size: 22px;
+            color: #94A3B8;
+        }
+        .nav-label {
+            font-size: 10px;
+            color: #94A3B8;
+            margin-top: 4px;
+        }
+        .nav-btn.active .nav-icon,
+        .nav-btn.active .nav-label {
+            color: #0F2B3D;
+        }
+
+        .hidden {
+            display: none;
+        }
+        .alert-error {
+            background: #FEE2E2;
+            color: #B91C1C;
+            padding: 12px;
+            border-radius: 24px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+<div id="app" class="app-container">
+    <!-- LOGIN SAHIFASI -->
+    <div id="loginScreen">
+        <div class="login-bg">
+            <div class="login-card">
+                <div class="logo-big">
+                    <h1>NEXTRA <span>BANK</span></h1>
+                    <p>core banking system</p>
+                </div>
+                <div id="loginError" class="hidden"></div>
+                <input type="tel" id="loginPhone" class="input-field" placeholder="+998937220523" value="+998937220523">
+                <input type="password" id="loginPassword" class="input-field" placeholder="Parol" value="Admin@123">
+                <button id="loginBtn" class="btn btn-primary">Kirish</button>
+                <p style="text-align: center; margin-top: 20px; font-size: 13px;">
+                    <a href="#" id="showRegBtn" style="color: #0F2B3D;">Hisob yo'q? Ro'yxatdan o'tish</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- REGISTER SAHIFASI -->
+    <div id="registerScreen" class="hidden">
+        <div class="login-bg">
+            <div class="login-card">
+                <div class="logo-big">
+                    <h2>📝 Ro'yxatdan o'tish</h2>
+                </div>
+                <div id="regError" class="hidden"></div>
+                <input type="text" id="regName" class="input-field" placeholder="To'liq ism">
+                <input type="text" id="regPassport" class="input-field" placeholder="Passport AA1234567">
+                <input type="tel" id="regPhone" class="input-field" placeholder="+998901234567">
+                <input type="date" id="regBirth" class="input-field">
+                <input type="password" id="regPwd" class="input-field" placeholder="Parol (8+ belgi, 1 harf+1 raqam)">
+                <input type="password" id="regPwd2" class="input-field" placeholder="Parolni takrorlang">
+                <button id="doRegBtn" class="btn btn-primary">Ro'yxatdan o'tish</button>
+                <p style="text-align: center; margin-top: 16px;"><a href="#" id="backToLoginBtn" style="color: #0F2B3D;">⏎ Orqaga</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ASOSIY DASHBOARD -->
+    <div id="dashboardScreen" class="hidden">
+        <div class="status-bar">
+            <span>📶 5G</span>
+            <span id="currentTime">--:--</span>
+            <span>🔋 100%</span>
+        </div>
+        <div class="scroll-area">
+            <!-- Header -->
+            <div class="bank-header">
+                <div class="greeting">
+                    <h4>Xush kelibsiz</h4>
+                    <h2 id="userName">Foydalanuvchi</h2>
+                </div>
+                <div class="balance-card">
+                    <div class="balance-label">Asosiy hamyon</div>
+                    <div class="balance-amount" id="mainBalance">0 UZS</div>
+                    <div class="card-number" id="cardNumberDisplay">•••• •••• •••• ••••</div>
+                    <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                        <span id="cardExpiry">12/28</span>
+                        <span>UZS</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-grid">
+                <div class="quick-item" data-action="credit">
+                    <div class="quick-icon">📊</div>
+                    <div class="quick-label">Kredit</div>
+                </div>
+                <div class="quick-item" data-action="deposit">
+                    <div class="quick-icon">💰</div>
+                    <div class="quick-label">Depozit</div>
+                </div>
+                <div class="quick-item" data-action="transfer">
+                    <div class="quick-icon">🔄</div>
+                    <div class="quick-label">O'tkazma</div>
+                </div>
+                <div class="quick-item" data-action="newcard">
+                    <div class="quick-icon">💳+</div>
+                    <div class="quick-label">Karta</div>
+                </div>
+            </div>
+
+            <!-- Tab Bar -->
+            <div class="tab-bar">
+                <div class="tab active" data-tab="home">Bosh sahifa</div>
+                <div class="tab" data-tab="credits">Kreditlar</div>
+                <div class="tab" data-tab="deposits">Depozitlar</div>
+                <div class="tab" data-tab="history">Tarix</div>
+            </div>
+
+            <!-- Content Pages -->
+            <div class="content-panel">
+                <!-- Home Page -->
+                <div id="homePage" class="page active">
+                    <div class="card-item" style="border-left-color: #0F2B3D;">
+                        <div class="flex-row"><strong>📋 So'nggi tranzaksiyalar</strong></div>
+                        <div id="recentTxnsList"></div>
+                    </div>
+                    <div class="card-item" style="border-left-color: #F59E0B;">
+                        <div class="flex-row"><strong>📊 Faol kreditlar</strong></div>
+                        <div id="activeLoansList"></div>
+                    </div>
+                </div>
+
+                <!-- Credits Page -->
+                <div id="creditsPage" class="page">
+                    <div class="card-item">
+                        <div class="flex-row"><strong>📊 Kredit olish</strong></div>
+                        <input type="number" id="loanAmount" class="input-field" placeholder="Summa (UZS)" style="margin-top: 12px;">
+                        <input type="number" id="loanMonths" class="input-field" placeholder="Muddat (oy) 1-60">
+                        <button id="calcLoanBtn" class="btn btn-primary">Hisoblash</button>
+                        <div id="loanResult" style="display: none; margin-top: 16px; background: #F1F5F9; border-radius: 24px; padding: 16px;"></div>
+                    </div>
+                    <div class="card-item">
+                        <div class="flex-row"><strong>📋 Mening kreditlarim</strong></div>
+                        <div id="myLoansList"></div>
+                    </div>
+                </div>
+
+                <!-- Deposits Page -->
+                <div id="depositsPage" class="page">
+                    <div class="card-item">
+                        <div class="flex-row"><strong>💰 Depozit ochish (30 kun, 25%)</strong></div>
+                        <input type="number" id="depositSum" class="input-field" placeholder="Summa (UZS)" style="margin-top: 12px;">
+                        <button id="openDepositBtn" class="btn btn-primary">Depozit ochish</button>
+                    </div>
+                    <div class="card-item">
+                        <div class="flex-row"><strong>📋 Mening depozitlarim</strong></div>
+                        <div id="myDepositsList"></div>
+                    </div>
+                </div>
+
+                <!-- History Page -->
+                <div id="historyPage" class="page">
+                    <div class="card-item">
+                        <div class="flex-row"><strong>📜 Tranzaksiyalar tarixi</strong></div>
+                        <div id="allTxnsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-btn active" data-nav="home">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Bosh</div>
+            </div>
+            <div class="nav-btn" data-nav="credits">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Kredit</div>
+            </div>
+            <div class="nav-btn" data-nav="deposits">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Depozit</div>
+            </div>
+            <div class="nav-btn" data-nav="history">
+                <div class="nav-icon">📜</div>
+                <div class="nav-label">Tarix</div>
+            </div>
+            <div class="nav-btn" id="profileNavBtn">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Profil</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFILE PANEL (hidden) -->
+    <div id="profilePanel" class="hidden" style="padding: 20px;">
+        <div class="card-item" style="margin-top: 20px;">
+            <div class="flex-row"><strong>👤 Shaxsiy ma'lumotlar</strong></div>
+            <div id="profileInfo" style="margin-top: 12px;"></div>
+            <button id="logoutBtn" class="btn btn-danger" style="margin-top: 20px;">Chiqish</button>
+        </div>
+        <div class="card-item">
+            <div class="flex-row"><strong>🔐 Biometrik kalit</strong></div>
+            <button id="genBioBtn" class="btn btn-primary" style="margin-top: 10px;">Yangi kalit yaratish</button>
+            <div id="bioDisplay" style="display: none; margin-top: 12px; background: #E6F7EC; padding: 12px; border-radius: 20px; word-break: break-all;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============================================
+    // REAL BANK CORE - LOCAL STORAGE ENGINE
+    // ============================================
+    
+    let CURRENT_USER = null;
+    
+    // Database
+    let DB = {
+        users: [],
+        wallets: [],
+        cards: [],
+        credits: [],
+        deposits: [],
+        transactions: []
+    };
+    
+    function saveDB() {
+        localStorage.setItem('nextra_bank_db', JSON.stringify(DB));
+    }
+    
+    function loadDB() {
+        const saved = localStorage.getItem('nextra_bank_db');
+        if (saved) {
+            DB = JSON.parse(saved);
+        } else {
+            // Admin yaratish (SIZNING KARTANGIZ)
+            const adminId = 'admin_' + Date.now();
+            DB.users.push({
+                id: adminId,
+                fullName: 'Allamurotov Azimbek',
+                phone: '+998937220523',
+                passport: 'AB1234567',
+                birth: '1990-01-01',
+                passwordHash: btoa('Admin@123'),
+                role: 'admin',
+                blocked: false
+            });
+            DB.wallets.push({ id: 'w_' + adminId, userId: adminId, balance: 1000000000 });
+            DB.cards.push({ id: 'c_' + adminId, walletId: 'w_' + adminId, number: '4198 1300 0113 9616', expiry: '12/28' });
+        }
+    }
+    
+    function getUserWallet(userId) {
+        return DB.wallets.find(w => w.userId === userId);
+    }
+    
+    function getUserCards(userId) {
+        const wallet = getUserWallet(userId);
+        return DB.cards.filter(c => c.walletId === wallet?.id);
+    }
+    
+    function formatMoney(n) {
+        return new Intl.NumberFormat('uz-UZ').format(Math.round(n)) + ' UZS';
+    }
+    
+    function showToast(msg, isError = false) {
+        let old = document.querySelector('.toast-msg');
+        if (old) old.remove();
+        let div = document.createElement('div');
+        div.className = 'toast-msg';
+        div.style.background = isError ? '#B91C1C' : '#1E293B';
+        div.innerText = msg;
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 2500);
+    }
+    
+    // Kredit hisobi (annuitet)
+    function calculateLoan(amount, months) {
+        const monthlyRate = 0.40 / 12;
+        const monthly = amount * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+        const total = monthly * months;
+        return { monthly: Math.round(monthly), total: Math.round(total), interest: Math.round(total - amount) };
+    }
+    
+    // Kredit berish (ADMIN kartasidan pul yechiladi)
+    function disburseLoan(userId, amount, months) {
+        const adminUser = DB.users.find(u => u.role === 'admin');
+        const adminWallet = getUserWallet(adminUser.id);
+        const userWallet = getUserWallet(userId);
+        
+        if (!adminWallet || adminWallet.balance < amount) {
+            throw new Error('Bank likvidligi yetarli emas!');
+        }
+        
+        const calc = calculateLoan(amount, months);
+        
+        // ADMIN kartasidan yechish
+        adminWallet.balance -= amount;
+        // Foydalanuvchiga berish
+        userWallet.balance += amount;
+        
+        const nextDue = new Date();
+        nextDue.setDate(nextDue.getDate() + 30);
+        
+        DB.credits.push({
+            id: Date.now() + '_loan',
+            userId: userId,
+            amount: amount,
+            months: months,
+            monthlyPayment: calc.monthly,
+            remaining: calc.total,
+            status: 'ACTIVE',
+            nextDue: nextDue.toISOString(),
+            overdueDays: 0
+        });
+        
+        DB.transactions.unshift({
+            id: Date.now() + '_txn',
+            userId: userId,
+            type: 'KREDIT',
+            amount: amount,
+            date: new Date().toISOString(),
+            desc: `Kredit mablag'i tushdi. Oylik to'lov: ${formatMoney(calc.monthly)}`
+        });
+        
+        saveDB();
+        return calc;
+    }
+    
+    // Avtomatik debet (har 20 sek)
+    function runAutoDebit() {
+        let changed = false;
+        for (let loan of DB.credits) {
+            if (loan.status !== 'ACTIVE') continue;
+            const today = new Date();
+            const dueDate = new Date(loan.nextDue);
+            if (today >= dueDate) {
+                const userWallet = getUserWallet(loan.userId);
+                if (userWallet && userWallet.balance >= loan.monthlyPayment) {
+                    userWallet.balance -= loan.monthlyPayment;
+                    loan.remaining -= loan.monthlyPayment;
+                    loan.overdueDays = 0;
+                    const newDue = new Date(dueDate);
+                    newDue.setDate(newDue.getDate() + 30);
+                    loan.nextDue = newDue.toISOString();
+                    DB.transactions.unshift({
+                        id: Date.now() + '_auto',
+                        userId: loan.userId,
+                        type: 'AUTO_DEBIT',
+                        amount: loan.monthlyPayment,
+                        date: new Date().toISOString(),
+                        desc: 'Avtomatik kredit to\'lovi'
+                    });
+                    if (loan.remaining <= 0) loan.status = 'CLOSED';
+                    changed = true;
+                } else {
+                    loan.overdueDays = (loan.overdueDays || 0) + 1;
+                    const penalty = Math.round(loan.monthlyPayment * 0.005);
+                    loan.remaining += penalty;
+                    DB.transactions.unshift({
+                        id: Date.now() + '_pen',
+                        userId: loan.userId,
+                        type: 'PENYA',
+                        amount: penalty,
+                        date: new Date().toISOString(),
+                        desc: `${loan.overdueDays} kun muddat o'tgan, penya ${formatMoney(penalty)}`
+                    });
+                    if (loan.overdueDays >= 30) {
+                        loan.status = 'DEFAULTED';
+                        const user = DB.users.find(u => u.id === loan.userId);
+                        if (user) user.blocked = true;
+                        DB.transactions.unshift({
+                            id: Date.now() + '_block',
+                            userId: loan.userId,
+                            type: 'BLOKLANGAN',
+                            amount: 0,
+                            date: new Date().toISOString(),
+                            desc: '30+ kun to\'lovsizlik, hisob bloklandi'
+                        });
+                    }
+                    changed = true;
+                }
+            }
+        }
+        if (changed) {
+            saveDB();
+            if (CURRENT_USER && document.getElementById('dashboardScreen') && !document.getElementById('dashboardScreen').classList.contains('hidden')) {
+                renderDashboard();
+            }
+        }
+    }
+    
+    // Depozit ochish
+    function openDeposit(userId, amount) {
+        const wallet = getUserWallet(userId);
+        if (!wallet || wallet.balance < amount) throw new Error('Pul yetarli emas!');
+        wallet.balance -= amount;
+        const maturity = new Date();
+        maturity.setDate(maturity.getDate() + 30);
+        DB.deposits.push({
+            id: Date.now() + '_dep',
+            userId: userId,
+            amount: amount,
+            interest: amount * 0.25,
+            maturity: maturity.toISOString(),
+            status: 'ACTIVE'
+        });
+        DB.transactions.unshift({
+            id: Date.now() + '_depOpen',
+            userId: userId,
+            type: 'DEPOZIT',
+            amount: amount,
+            date: new Date().toISOString(),
+            desc: `30 kunlik depozit, 25% foiz`
+        });
+        saveDB();
+    }
+    
+    // Pul o'tkazma
+    function transferMoney(senderId, receiverPhone, amount) {
+        const receiver = DB.users.find(u => u.phone === receiverPhone);
+        if (!receiver) throw new Error('Qabul qiluvchi topilmadi!');
+        const senderWallet = getUserWallet(senderId);
+        const receiverWallet = getUserWallet(receiver.id);
+        if (!senderWallet || senderWallet.balance < amount) throw new Error('Pul yetarli emas!');
+        senderWallet.balance -= amount;
+        receiverWallet.balance += amount;
+        DB.transactions.unshift({
+            id: Date.now() + '_transOut',
+            userId: senderId,
+            type: "O'TKAZMA",
+            amount: amount,
+            date: new Date().toISOString(),
+            desc: `${receiver.fullName} ga o'tkazma`
+        });
+        DB.transactions.unshift({
+            id: Date.now() + '_transIn',
+            userId: receiver.id,
+            type: "KIRIM",
+            amount: amount,
+            date: new Date().toISOString(),
+            desc: `${DB.users.find(u=>u.id===senderId).fullName} dan pul keldi`
+        });
+        saveDB();
+    }
+    
+    // Yangi karta
+    function createNewCard(userId) {
+        const wallet = getUserWallet(userId);
+        if (!wallet) throw new Error('Hamyon topilmadi');
+        const newNumber = '8600 ' + Math.floor(Math.random() * 1000000000000).toString().padStart(12, '0').match(/.{1,4}/g).join(' ');
+        DB.cards.push({
+            id: Date.now() + '_card',
+            walletId: wallet.id,
+            number: newNumber,
+            expiry: '12/30'
+        });
+        saveDB();
+        return newNumber;
+    }
+    
+    // Depozit yetilishini tekshirish
+    function checkMaturedDeposits() {
+        let changed = false;
+        for (let dep of DB.deposits) {
+            if (dep.status !== 'ACTIVE') continue;
+            if (new Date() >= new Date(dep.maturity)) {
+                const wallet = getUserWallet(dep.userId);
+                if (wallet) {
+                    const totalReturn = dep.amount + dep.interest;
+                    wallet.balance += totalReturn;
+                    dep.status = 'CLOSED';
+                    DB.transactions.unshift({
+                        id: Date.now() + '_mat',
+                        userId: dep.userId,
+                        type: 'DEPOZIT_TUGADI',
+                        amount: totalReturn,
+                        date: new Date().toISOString(),
+                        desc: `Depozit muddati tugadi, +${formatMoney(dep.interest)} foiz`
+                    });
+                    changed = true;
+                }
+            }
+        }
+        if (changed) {
+            saveDB();
+            if (CURRENT_USER && document.getElementById('dashboardScreen') && !document.getElementById('dashboardScreen').classList.contains('hidden')) {
+                renderDashboard();
+            }
+        }
+    }
+    
+    // ============ UI RENDER ============
+    function renderDashboard() {
+        if (!CURRENT_USER) return;
+        
+        const wallet = getUserWallet(CURRENT_USER.id);
+        const cards = getUserCards(CURRENT_USER.id);
+        const mainCard = cards[0] || { number: '•••• •••• •••• ••••', expiry: '••/••' };
+        
+        document.getElementById('userName').innerHTML = CURRENT_USER.fullName.split(' ')[0];
+        document.getElementById('mainBalance').innerHTML = formatMoney(wallet?.balance || 0);
+        document.getElementById('cardNumberDisplay').innerHTML = mainCard.number;
+        document.getElementById('cardExpiry').innerHTML = mainCard.expiry;
+        
+        // So'nggi tranzaksiyalar
+        const myTxns = DB.transactions.filter(t => t.userId === CURRENT_USER.id).slice(0, 5);
+        document.getElementById('recentTxnsList').innerHTML = myTxns.map(t => `
+            <div class="flex-row" style="margin-top: 8px;">
+                <span>${t.type}</span>
+                <span style="font-weight: 600;">${formatMoney(t.amount)}</span>
+            </div>
+            <div class="text-muted" style="font-size: 10px;">${new Date(t.date).toLocaleString()}</div>
+        `).join('') || '<div class="text-muted" style="margin-top: 8px;">Hali tranzaksiya yo‘q</div>';
+        
+        // Faol kreditlar
+        const activeLoans = DB.credits.filter(c => c.userId === CURRENT_USER.id && c.status === 'ACTIVE');
+        document.getElementById('activeLoansList').innerHTML = activeLoans.slice(0, 2).map(l => `
+            <div class="flex-row" style="margin-top: 8px;">
+                <span>${formatMoney(l.amount)}</span>
+                <span class="text-muted">qarz: ${formatMoney(l.remaining)}</span>
+            </div>
+        `).join('') || '<div class="text-muted" style="margin-top: 8px;">Faol kreditlar yo‘q</div>';
+        
+        // Mening kreditlarim
+        const allLoans = DB.credits.filter(c => c.userId === CURRENT_USER.id);
+        document.getElementById('myLoansList').innerHTML = allLoans.map(l => `
+            <div class="flex-row"><span>${formatMoney(l.amount)}</span><span class="badge">${l.status}</span></div>
+            <div class="flex-row text-muted"><span>Oylik: ${formatMoney(l.monthlyPayment)}</span><span>Qoldiq: ${formatMoney(l.remaining)}</span></div>
+            <div class="text-muted" style="font-size: 11px;">Keyingi to'lov: ${new Date(l.nextDue).toLocaleDateString()}</div>
+            <div class="text-muted" style="font-size: 11px;">Muddati o'tgan: ${l.overdueDays} kun</div>
+            ${l !== allLoans[allLoans.length-1] ? '<hr style="margin: 12px 0;">' : ''}
+        `).join('') || '<div class="text-muted">Kreditlar mavjud emas</div>';
+        
+        // Depozitlar
+        const myDeposits = DB.deposits.filter(d => d.userId === CURRENT_USER.id && d.status === 'ACTIVE');
+        document.getElementById('myDepositsList').innerHTML = myDeposits.map(d => `
+            <div class="flex-row"><span>${formatMoney(d.amount)}</span><span>+25% = ${formatMoney(d.interest)}</span></div>
+            <div class="text-muted">Tugash: ${new Date(d.maturity).toLocaleDateString()}</div>
+        `).join('') || '<div class="text-muted">Depozitlar mavjud emas</div>';
+        
+        // Tranzaksiyalar tarixi
+        const allTxns = DB.transactions.filter(t => t.userId === CURRENT_USER.id);
+        document.getElementById('allTxnsList').innerHTML = allTxns.map(t => `
+            <div class="flex-row"><span>${t.type}</span><span style="font-weight: 600;">${formatMoney(t.amount)}</span></div>
+            <div class="text-muted">${new Date(t.date).toLocaleString()}<br>${t.desc || ''}</div>
+            <hr style="margin: 10px 0;">
+        `).join('') || '<div class="text-muted">Tranzaksiyalar yo‘q</div>';
+        
+        // Profil
+        document.getElementById('profileInfo').innerHTML = `
+            <div class="flex-row"><span>👤 Ism:</span><span>${CURRENT_USER.fullName}</span></div>
+            <div class="flex-row"><span>🪪 Passport:</span><span>${CURRENT_USER.passport}</span></div>
+            <div class="flex-row"><span>📱 Telefon:</span><span>${CURRENT_USER.phone}</span></div>
+            <div class="flex-row"><span>💰 Balans:</span><span>${formatMoney(wallet?.balance || 0)}</span></div>
+        `;
+    }
+    
+    // Page navigation
+    let currentTab = 'home';
+    
+    function switchToPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId + 'Page').classList.add('active');
+        
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.tab[data-tab="${pageId}"]`).classList.add('active');
+        
+        currentTab = pageId;
+    }
+    
+    function showDashboard() {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('registerScreen').classList.add('hidden');
+        document.getElementById('dashboardScreen').classList.remove('hidden');
+        document.getElementById('profilePanel').classList.add('hidden');
+        renderDashboard();
+    }
+    
+    function showProfile() {
+        document.getElementById('dashboardScreen').classList.add('hidden');
+        document.getElementById('profilePanel').classList.remove('hidden');
+        renderDashboard();
+    }
+    
+    function showLogin() {
+        document.getElementById('dashboardScreen').classList.add('hidden');
+        document.getElementById('profilePanel').classList.add('hidden');
+        document.getElementById('registerScreen').classList.add('hidden');
+        document.getElementById('loginScreen').classList.remove('hidden');
+    }
+    
+    // Time update
+    function updateTime() {
+        const timeEl = document.getElementById('currentTime');
+        if (timeEl) {
+            timeEl.innerHTML = new Date().toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
+        }
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+    
+    // ============ EVENT LISTENERS ============
+    document.addEventListener('DOMContentLoaded', () => {
+        loadDB();
+        
+        // Login
+        document.getElementById('loginBtn').onclick = () => {
+            const phone = document.getElementById('loginPhone').value.trim();
+            const pwd = document.getElementById('loginPassword').value;
+            const user = DB.users.find(u => u.phone === phone && atob(u.passwordHash) === pwd);
+            if (!user) {
+                document.getElementById('loginError').innerHTML = 'Telefon yoki parol xato!';
+                document.getElementById('loginError').classList.remove('hidden');
+                setTimeout(() => document.getElementById('loginError').classList.add('hidden'), 2000);
+                return;
+            }
+            if (user.blocked) {
+                showToast('Hisobingiz bloklangan!', true);
+                return;
+            }
+            CURRENT_USER = user;
+            showDashboard();
+        };
+        
+        // Register
+        document.getElementById('showRegBtn').onclick = (e) => {
+            e.preventDefault();
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('registerScreen').classList.remove('hidden');
+        };
+        
+        document.getElementById('backToLoginBtn').onclick = (e) => {
+            e.preventDefault();
+            document.getElementById('registerScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        };
+        
+        document.getElementById('doRegBtn').onclick = () => {
+            const full = document.getElementById('regName').value;
+            const passport = document.getElementById('regPassport').value;
+            const phone = document.getElementById('regPhone').value;
+            const birth = document.getElementById('regBirth').value;
+            const pwd = document.getElementById('regPwd').value;
+            const pwd2 = document.getElementById('regPwd2').value;
+            
+            if (!full || !passport || !phone || !birth) {
+                showToast("Barcha maydonlarni to'ldiring!", true);
+                return;
+            }
+            if (pwd !== pwd2) { showToast("Parollar mos emas!", true); return; }
+            if (pwd.length < 8 || !/[A-Za-z]/.test(pwd) || !/\d/.test(pwd)) {
+                showToast("Parol 8+ belgi, 1 harf va 1 raqam!", true);
+                return;
+            }
+            if (!/^[A-Z]{2}\d{7}$/.test(passport)) {
+                showToast("Passport formati: AA1234567", true);
+                return;
+            }
+            if (!/^\+998\d{9}$/.test(phone)) {
+                showToast("Telefon formati: +998XXXXXXXXX", true);
+                return;
+            }
+            if (DB.users.find(u => u.phone === phone)) {
+                showToast("Bu telefon allaqachon ro'yxatdan o'tgan!", true);
+                return;
+            }
+            
+            const newId = Date.now() + '_user';
+            DB.users.push({
+                id: newId,
+                fullName: full,
+                phone: phone,
+                passport: passport,
+                birth: birth,
+                passwordHash: btoa(pwd),
+                role: 'user',
+                blocked: false
+            });
+            const walletId = 'w_' + newId;
+            DB.wallets.push({ id: walletId, userId: newId, balance: 0 });
+            const cardNum = '8600 ' + Math.floor(Math.random() * 1e12).toString().padStart(12, '0').match(/.{1,4}/g).join(' ');
+            DB.cards.push({ id: 'c_' + newId, walletId: walletId, number: cardNum, expiry: '12/30' });
+            saveDB();
+            
+            showToast("Ro'yxatdan o'tdingiz! Endi kiring.");
+            document.getElementById('registerScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        };
+        
+        // Quick actions
+        document.querySelectorAll('.quick-item').forEach(el => {
+            el.onclick = () => {
+                const action = el.getAttribute('data-action');
+                if (action === 'credit') switchToPage('credits');
+                if (action === 'deposit') switchToPage('deposits');
+                if (action === 'transfer') {
+                    const phone = prompt("Qabul qiluvchi telefon (+998...)");
+                    const amount = parseFloat(prompt("Summa (UZS)"));
+                    if (phone && amount) {
+                        try {
+                            transferMoney(CURRENT_USER.id, phone, amount);
+                            showToast(`${formatMoney(amount)} o'tkazildi!`);
+                            renderDashboard();
+                        } catch(e) { showToast(e.message, true); }
+                    }
+                }
+                if (action === 'newcard') {
+                    try {
+                        const newCard = createNewCard(CURRENT_USER.id);
+                        showToast(`Yangi karta yaratildi: ${newCard}`);
+                        renderDashboard();
+                    } catch(e) { showToast(e.message, true); }
+                }
+            };
+        });
+        
+        // Tab navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.onclick = () => {
+                const tabName = tab.getAttribute('data-tab');
+                switchToPage(tabName);
+            };
+        });
+        
+        // Bottom nav
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.onclick = () => {
+                const nav = btn.getAttribute('data-nav');
+                if (nav === 'home') { showDashboard(); switchToPage('home'); }
+                else if (nav === 'credits') { showDashboard(); switchToPage('credits'); }
+                else if (nav === 'deposits') { showDashboard(); switchToPage('deposits'); }
+                else if (nav === 'history') { showDashboard(); switchToPage('history'); }
+            };
+        });
+        
+        document.getElementById('profileNavBtn').onclick = () => showProfile();
+        document.getElementById('logoutBtn').onclick = () => {
+            CURRENT_USER = null;
+            showLogin();
+        };
+        
+        // Kredit hisoblash
+        document.getElementById('calcLoanBtn').onclick = () => {
+            const amount = parseFloat(document.getElementById('loanAmount').value);
+            const months = parseInt(document.getElementById('loanMonths').value);
+            if (isNaN(amount) || amount < 100000 || isNaN(months) || months < 1 || months > 60) {
+                showToast("Summa (min 100k) va muddat (1-60 oy) to'g'ri kiriting!", true);
+                return;
+            }
+            const calc = calculateLoan(amount, months);
+            const resultDiv = document.getElementById('loanResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div class="flex-row"><span>📆 Oylik to'lov:</span><strong>${formatMoney(calc.monthly)}</strong></div>
+                <div class="flex-row"><span>💰 Jami to'lov:</span><strong>${formatMoney(calc.total)}</strong></div>
+                <div class="flex-row"><span>📈 Jami foiz:</span><strong>${formatMoney(calc.interest)}</strong></div>
+                <button id="confirmLoanBtn" class="btn btn-primary" style="margin-top: 12px;">✅ Kredit olish</button>
+            `;
+            document.getElementById('confirmLoanBtn').onclick = () => {
+                try {
+                    disburseLoan(CURRENT_USER.id, amount, months);
+                    showToast(`✅ Kredit olindi! ${formatMoney(amount)} hisobingizga tushdi.`);
+                    renderDashboard();
+                    document.getElementById('loanAmount').value = '';
+                    document.getElementById('loanMonths').value = '';
+                    resultDiv.style.display = 'none';
+                } catch(e) { showToast(e.message, true); }
+            };
+        };
+        
+        // Depozit ochish
+        document.getElementById('openDepositBtn').onclick = () => {
+            const amount = parseFloat(document.getElementById('depositSum').value);
+            if (isNaN(amount) || amount < 100000) {
+                showToast("Depozit summasi minimal 100,000 UZS", true);
+                return;
+            }
+            try {
+                openDeposit(CURRENT_USER.id, amount);
+                showToast(`Depozit ochildi! ${formatMoney(amount)} bloklandi.`);
+                renderDashboard();
+                document.getElementById('depositSum').value = '';
+            } catch(e) { showToast(e.message, true); }
+        };
+        
+        // Biometrik kalit
+        document.getElementById('genBioBtn').onclick = () => {
+            const bio = Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+            const display = document.getElementById('bioDisplay');
+            display.innerHTML = `<code>${bio}</code><br><small>🔐 Saqlab qo'ying, faqat bir marta ko'rsatiladi</small>`;
+            display.style.display = 'block';
+            setTimeout(() => display.style.display = 'none', 10000);
+        };
+        
+        // Background jobs
+        setInterval(() => {
+            runAutoDebit();
+            checkMaturedDeposits();
+        }, 15000);
+        
+        // Admin hisob mavjudligini tekshirish
+        if (!DB.users.find(u => u.role === 'admin')) {
+            const adminId = 'admin_' + Date.now();
+            DB.users.push({
+                id: adminId,
+                fullName: 'Allamurotov Azimbek',
+                phone: '+998937220523',
+                passport: 'AB1234567',
+                birth: '1990-01-01',
+                passwordHash: btoa('Admin@123'),
+                role: 'admin',
+                blocked: false
+            });
+            DB.wallets.push({ id: 'w_' + adminId, userId: adminId, balance: 1000000000 });
+            DB.cards.push({ id: 'c_' + adminId, walletId: 'w_' + adminId, number: '4198 1300 0113 9616', expiry: '12/28' });
+            saveDB();
+        }
+    });
+</script>
+</body>
+</html>
